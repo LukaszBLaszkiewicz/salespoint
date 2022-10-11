@@ -71,13 +71,16 @@ public class Main {
                         break;
                 }
             case 2:
+                //OBJECTS
                 DatabaseManager dbOrder = new DatabaseManager();
-                Order orderObj = new Order();
+                Order orderObj = new Order(String name, ); // DO POPRAWY
+                //VARIABLES
                 String name, barcode;
                 Float price,totalPrice;
+                //LISTS
                 List<Product> productList = new ArrayList<Product>();
                 productList = dbOrder.showAllProductsDatabase();
-                List<Product> orderList = new ArrayList<Product>();
+                List<Order> orderList = new ArrayList<Order>();
                 // WHILE I=0
                 System.out.flush();
                 System.out.println("========================PRODUCTS DATABASE========================");
@@ -89,18 +92,18 @@ public class Main {
                 System.out.println("=================================================================");
                 System.out.println("Add product to the order: ");
                 String orderProductName = orderProduct.nextLine();
-
+                System.out.println("Enter the quantity: ");
+                Integer orderProductAmount = orderProduct.nextInt();
+                totalPrice = orderObj.Bill(orderProductName,orderProductAmount);
                 for(Product p: productList){
                     if(p.getName()==orderProductName){
                         name=p.getName();
                         barcode=p.getBarcode();
                         price=p.getPrice();
-                        orderList.add(new Product(name,barcode,price);
+                        orderList.add(new Order(name,barcode,price,orderProductAmount,totalPrice);
                     }
                 }
-                System.out.println("Enter the quantity: ");
-                Integer orderProductAmount = orderProduct.nextInt();
-                totalPrice = orderObj.Bill(orderProductName,orderProductAmount);
+
                 // TUTAJ MUSI BYC KLASA KTORA MA JESZCZE CENE ORPOCZ WSZYSTKICH CECH PRODUKTU
 
 

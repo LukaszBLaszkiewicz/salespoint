@@ -8,7 +8,13 @@ public class Order {
     float productPrice;
     String name;
     String barcode;
-
+    public Order(String name, String barcode, float productPrice, int amount, float totalPrice){
+        name=this.name;
+        barcode=this.barcode;
+        productPrice=this.productPrice;
+        amount=this.amount;
+        totalPrice=this.totalPrice;
+    }
 
     float Bill(String name, int amount){
         DatabaseManager db = new DatabaseManager();
