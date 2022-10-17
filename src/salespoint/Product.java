@@ -3,9 +3,9 @@ package salespoint;
 public class Product  {
     private String name;
     private String barcode;
-    private Float price;
+    private Integer price;
 
-    public Product(String name, String barcode, Float price){
+    public Product(String name, String barcode, Integer price){
         this.name=name;
         this.barcode=barcode;
         this.price=price;
@@ -17,7 +17,7 @@ public class Product  {
     public String getBarcode(){
         return barcode;
     }
-    public Float getPrice(){
+    public Integer getPrice(){
         return price;
     }
 }

@@ -1,6 +1,7 @@
 package salespoint;
 
 import java.sql.*;
+import java.util.Scanner;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class DatabaseManager {
     public static final String DRIVER = "org.sqlite.JDBC";
-    public static final String DB_URL = "jdbc:sqlite:C:/sqlite/java/connect/net/salespoint/products.db";
+    public static final String DB_URL = "jdbc:sqlite:/home/kicaj/Documentsproducts.db";
 
     private Connection conn;
     private Statement stat;
@@ -80,7 +81,8 @@ public class DatabaseManager {
     //=====================================================================================================================
     public boolean deleteProductFromDatabase(String name){
         try{
-            PreparedStatement prepStmtDelete = conn.prepareStatement("DELETE FROM products WHERE name = 'zmienna'");
+            PreparedStatement prepStmtDelete = conn.prepareStatement("DELETE FROM products WHERE name = ?");
+            prepStmtDelete.setString(1, name);
             prepStmtDelete.execute();
         } catch (SQLException e){
             System.err.println("Error during editing data");
@@ -90,10 +92,13 @@ public class DatabaseManager {
         return true;
     }
     //=====================================================================================================================
-    public boolean editProductInDatabase(String name){ // ZLE TU JEST JESZCZE
+    public boolean editProductInDatabase(String name, String barcode, float price){
         try{
-            PreparedStatement prepStmtEdit = conn.prepareStatement("UPDATE products SET ? WHERE name = 'zmienna'");
-            prepStmtEdit.execute();
+            PreparedStatement stmt = conn.prepareStatement("UPDATE products SET barcode = ?, price = ? WHERE name = ?");
+            stmt.setString(1, barcode);
+            stmt.setFloat(2, price);
+            stmt.setString(3, name);
+            Integer rs = stmt.executeUpdate();
         } catch (SQLException e){
             System.err.println("Error during editing data");
             e.printStackTrace();
@@ -102,16 +107,16 @@ public class DatabaseManager {
         return true;
     }
     //=====================================================================================================================
-    public List<Product> showAllProductsDatabase(){
+    public List<Product> copyDatabaseToList() {
         List<Product> productList = new ArrayList<Product>();
         try {
             ResultSet allProducts = stat.executeQuery("SELECT * FROM products");
             String name, barcode;
-            float price;
-            while(allProducts.next()) {
+            Integer price;
+            while (allProducts.next()) {
                 name = allProducts.getString("name");
                 barcode = allProducts.getString("barcode");
-                price = allProducts.getFloat("price");
+                price = allProducts.getInt("price");
                 productList.add(new Product(name, barcode, price));
             }
         } catch (SQLException e) {
@@ -120,13 +125,22 @@ public class DatabaseManager {
         }
         return productList;
     }
+    public void showAllDatabase(List<Product> productList){
+        System.out.flush();
+        System.out.println("========================PRODUCTS DATABASE========================");
+        System.out.printf("%10s %25s %25s", "NAME", "BARCODE", "PRICE");
+        for (Product p : productList) {
+            System.out.println();
+            System.out.format("%10s %25s %25s", p.getName(), p.getBarcode(), p.getPrice());
+        }
+    }
     //=====================================================================================================================
     public float getProductPrice(String name) {
         float price=0;
         try {
-            PreparedStatement oneProduct = conn.prepareStatement("SELECT price FROM products WHERE name = ?");
-            oneProduct.setString(1, name);
-            ResultSet rs = oneProduct.executeQuery();
+            PreparedStatement stmt = conn.prepareStatement("SELECT price FROM products WHERE name = ?");
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 price =rs.getFloat("price");
             }
