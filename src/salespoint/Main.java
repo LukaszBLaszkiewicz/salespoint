@@ -10,10 +10,11 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         //VARIABLES DECLARATIONS
-        int switchGroceryStoreMenu; // MAIN MENU SWITCH VARIABLE
-        int switchDatabaseMenu; // DATABASE MENU SWITCH VARIABLE
+        int switchGroceryStoreMenu=0; // MAIN MENU SWITCH VARIABLE
+        int switchDatabaseMenu=0; // DATABASE MENU SWITCH VARIABLE
         int menuWhile=0;
-        int dbManagerWhile=0;
+        int whileDbManager=0;
+        float totalPrice;
 
         //OBJECT DECLARATIONS
         DatabaseManager db = new DatabaseManager();
@@ -26,8 +27,8 @@ public class Main {
         db.connectToDatabase();
         db.createTableInDatabase();
         //MENU
-        while(menuWhile==0){
-            System.out.flush();
+        mainMenu: while(switchGroceryStoreMenu!=3){
+            clearScreen();
             System.out.println("===GROCERY STORE===");
             System.out.println("1. Database management");
             System.out.println("2. Make Order");
@@ -36,9 +37,8 @@ public class Main {
             switchGroceryStoreMenu = inMainMenu.nextInt();
             switch (switchGroceryStoreMenu) {
                 case 1:
-
-                    while(dbManagerWhile==0) {
-                        System.out.flush();
+                    databaseMenu: while(switchDatabaseMenu!=5) {
+                        clearScreen();
                         System.out.println();
                         System.out.println("========================DATABASE MANAGER========================");
                         System.out.println("1. Add product to database");
@@ -50,7 +50,7 @@ public class Main {
                         switchDatabaseMenu = inDBAddProduct.nextInt();
                         switch (switchDatabaseMenu) {
                             case 1:
-                                System.out.flush();
+                                clearScreen();
                                 System.out.println("========================ADDING NEW PRODUCT TO DATABASE========================");
                                 String test = inDBAddProduct.nextLine();
                                 System.out.println("Product name: ");
@@ -62,18 +62,19 @@ public class Main {
                                 db.addProductToDatabase(name, barcode, price);
                                 break;
                             case 2:
-                                System.out.flush();
+                                clearScreen();
                                 System.out.println("========================DELETE PRODUCT FROM DATABASE========================");
                                 System.out.println("Type product name");
                                 String deleteProduct = inDBEditProduct.nextLine();
                                 db.deleteProductFromDatabase(deleteProduct);
                                 break;
                             case 3:
+                                clearScreen();
                                 List<Product> productList = db.copyDatabaseToList();
                                 db.showAllDatabase(productList);
                                 break;
                             case 4:
-                                System.out.flush();
+                                clearScreen();
                                 System.out.println("========================EDIT PRODUCT IN DATABASE========================");
                                 System.out.println("Type product name which you want edit");
                                 String editProductName= inDBEditProduct.nextLine();
@@ -84,46 +85,44 @@ public class Main {
                                 db.editProductInDatabase(editProductName,editProductBarcode,editProductPrice);
                                 break;
                             case 5:
-                                dbManagerWhile=1;
-                                break;
+                                System.out.println("Back to main menu...");
+                                continue mainMenu;
                             default:
                                 System.out.println("Please type number from 1 to 5!");
                                 break;
                         }
                     }
                 case 2:
-
-                    //SCANNER VARIABLE
-                    Scanner orderProduct = new Scanner(System.in);
-                    //LIST
-
-                    //OBJECT
-
-
-                    System.out.flush();
-                    System.out.println("Add product to the order: ");
-                    String orderProductName = orderProduct.nextLine();
-                    System.out.println("Enter the quantity: ");
-                    Integer orderProductAmount = orderProduct.nextInt();
-                    Order order = new Order("dupa", "dupa", 1, 2);
+                    clearScreen();
+                    //CREATING PRODUCT LIST
                     List<Product> productList = db.copyDatabaseToList();
-                    List<Order> orderList=order.makeOrder(productList, orderProductName, orderProductAmount);
+                    db.showAllDatabase(productList);
+                    //CREATING ORDER LIST
+                    List<Order> orderList = new ArrayList<>();
+                    //CREATING ORDER OBJECT
+                    Order order = new Order("a", "a", 1, 1);
+                    //FILLING PRODUCT LIST
+                    productList = db.copyDatabaseToList();
+                    //FILLING ORDER LIST BASIC ON PRODUCT LIST
+                    orderList = order.makeOrder(productList);
+                    //DISPLAY ORDER LIST
                     order.showOrder(orderList);
-
-
-
-
-
-
-
-
-
-
+                    System.out.println("Total Price: ");
+                    Bill bill = new Bill();
+                    totalPrice=bill.Bill(orderList);
+                    System.out.print(totalPrice);
+                    System.out.println();
                     break;
                 case 3:
-                    //CLOSE PROGRAM
-                    break;
+                    System.out.println("Good bye!");
+                    return;
+                default:
+                    System.out.println("Type number from 1 to 3!");
             }
         }
+    }
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }

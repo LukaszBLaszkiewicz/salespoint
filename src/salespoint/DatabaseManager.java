@@ -14,7 +14,7 @@ import java.util.List;
 
 public class DatabaseManager {
     public static final String DRIVER = "org.sqlite.JDBC";
-    public static final String DB_URL = "jdbc:sqlite:/home/kicaj/Documentsproducts.db";
+    public static final String DB_URL = "jdbc:sqlite:C:/sqlite/java/connect/net/salespoint/products.db";
 
     private Connection conn;
     private Statement stat;
