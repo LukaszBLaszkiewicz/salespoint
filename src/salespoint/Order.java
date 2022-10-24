@@ -1,10 +1,5 @@
 package salespoint;
 
-import javax.xml.crypto.Data;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -14,8 +9,6 @@ public class Order {
     private Integer productPrice;
     private String name;
     private String barcode;
-    private Connection conn;
-    private Statement stat;
     public Order(String name, String barcode, int productPrice, int amount){
         this.name=name;
         this.barcode=barcode;
@@ -35,7 +28,7 @@ public class Order {
             Integer orderProductAmount = orderProduct.nextInt();
             for (Product p : productList) {
                 name = p.getName();
-                if (name.equals(orderProductName) == true) {
+                if (name.equals(orderProductName)) {
                     name = p.getName();
                     barcode = p.getBarcode();
                     productPrice = p.getPrice();

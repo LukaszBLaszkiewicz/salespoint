@@ -1,7 +1,6 @@
 package salespoint;
 
 import java.sql.*;
-import java.util.Scanner;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -9,7 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class DatabaseManager {
@@ -51,7 +49,7 @@ public class DatabaseManager {
         }
     }
     //=====================================================================================================================
-    public boolean createTableInDatabase(){
+    public void createTableInDatabase(){
         String productTable = "CREATE TABLE IF NOT EXISTS products (name varchar(255), barcode varchar(255), price varchar(255))";
         try {
             stat.execute(productTable);
@@ -59,12 +57,10 @@ public class DatabaseManager {
         catch (SQLException e){
             System.err.println("Error during table creation");
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
     //=====================================================================================================================
-    public boolean addProductToDatabase(String name, String barcode, Float price) {
+    public void addProductToDatabase(String name, String barcode, Float price) {
         try {
             PreparedStatement prepStmt = conn.prepareStatement("insert into products values (?,?,?);");
             prepStmt.setString(1, name);
@@ -74,12 +70,10 @@ public class DatabaseManager {
         } catch (SQLException e) {
             System.err.println("Error during data inserting");
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
     //=====================================================================================================================
-    public boolean deleteProductFromDatabase(String name){
+    public void deleteProductFromDatabase(String name){
         try{
             PreparedStatement prepStmtDelete = conn.prepareStatement("DELETE FROM products WHERE name = ?");
             prepStmtDelete.setString(1, name);
@@ -87,12 +81,10 @@ public class DatabaseManager {
         } catch (SQLException e){
             System.err.println("Error during editing data");
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
     //=====================================================================================================================
-    public boolean editProductInDatabase(String name, String barcode, float price){
+    public void editProductInDatabase(String name, String barcode, float price){
         try{
             PreparedStatement stmt = conn.prepareStatement("UPDATE products SET barcode = ?, price = ? WHERE name = ?");
             stmt.setString(1, barcode);
@@ -102,13 +94,11 @@ public class DatabaseManager {
         } catch (SQLException e){
             System.err.println("Error during editing data");
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
     //=====================================================================================================================
     public List<Product> copyDatabaseToList() {
-        List<Product> productList = new ArrayList<Product>();
+        List<Product> productList = new ArrayList<>();
         try {
             ResultSet allProducts = stat.executeQuery("SELECT * FROM products");
             String name, barcode;
@@ -125,6 +115,7 @@ public class DatabaseManager {
         }
         return productList;
     }
+    //=====================================================================================================================
     public void showAllDatabase(List<Product> productList){
         System.out.flush();
         System.out.println("========================PRODUCTS DATABASE========================");

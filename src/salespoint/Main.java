@@ -1,8 +1,5 @@
 package salespoint;
 
-import javax.xml.crypto.Data;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
@@ -12,8 +9,6 @@ public class Main {
         //VARIABLES DECLARATIONS
         int switchGroceryStoreMenu=0; // MAIN MENU SWITCH VARIABLE
         int switchDatabaseMenu=0; // DATABASE MENU SWITCH VARIABLE
-        int menuWhile=0;
-        int whileDbManager=0;
         float totalPrice;
 
         //OBJECT DECLARATIONS
@@ -109,7 +104,7 @@ public class Main {
                     order.showOrder(orderList);
                     System.out.println("Total Price: ");
                     Bill bill = new Bill();
-                    totalPrice=bill.Bill(orderList);
+                    totalPrice=bill.createBill(orderList);
                     System.out.print(totalPrice);
                     System.out.println();
                     break;
